@@ -1,11 +1,9 @@
 <template>
-  <h2>Coach Finder</h2>
+  <router-view></router-view>
 </template>
 
 <script>
-export default {
-  components: {},
-};
+export default {};
 </script>
 
 <style>
