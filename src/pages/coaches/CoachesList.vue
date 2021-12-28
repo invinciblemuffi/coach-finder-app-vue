@@ -6,16 +6,26 @@
       <router-link to="/register">Register as Coach</router-link>
     </div>
     <ul v-if="hasCoaches">
-      <li v-for="coach in filteredCoaches" :key="coach.id">
-        {{ coach.firstName }}
-      </li>
+      <coach-item
+        v-for="coach in filteredCoaches"
+        :key="coach.id"
+        :id="coach.id"
+        :firstName="coach.firstName"
+        :lastName="coach.lastName"
+        :areas="coach.areas"
+        :rate="coach.hourlyRate"
+      ></coach-item>
     </ul>
     <h3 v-else>No Coaches found.</h3>
   </section>
 </template>
 
 <script>
+import CoachItem from "../../components/coaches/CoachItem.vue";
 export default {
+  components: {
+    CoachItem,
+  },
   computed: {
     filteredCoaches() {
       // Since we are namespacing our coaches state in coaches/index.js,
@@ -30,3 +40,16 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+}
+</style>

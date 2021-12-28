@@ -1,13 +1,13 @@
 <template>
   <li>
     <h3>{{ fullName }}</h3>
-    <h4>${{ rate }}</h4>
+    <h4>${{ rate }}/hour</h4>
     <div>
       <span v-for="area in areas" :key="area">{{ area }}</span>
     </div>
     <div class="actions">
-      <router-link to="/coaches/c1/contact">Contact</router-link>
-      <router-link to="/coaches/c1">View Details</router-link>
+      <router-link to="coachContactLink">Contact</router-link>
+      <router-link to="coachDetailsLink">View Details</router-link>
     </div>
   </li>
 </template>
@@ -19,11 +19,11 @@ export default {
     fullName() {
       return this.firstName + " " + this.lastName;
     },
-    contactCoachLink() {
+    coachContactLink() {
       return this.$route.path + "/" + this.id + "/contact"; // /coaches/c1/contact
     },
     coachDetailsLink() {
-      return "/" + this.id; // /coaches/c1
+      return this.$route.path + "/" + this.id; // /coaches/c1
     },
   },
 };
