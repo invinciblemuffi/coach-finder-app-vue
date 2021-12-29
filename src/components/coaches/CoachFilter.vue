@@ -36,7 +36,6 @@ export default {
   },
   methods: {
     setFilter(e) {
-      console.log(e);
       const inputId = e.target.id;
       const isActive = e.target.checked;
       const updatedFilters = { ...this.filters, [inputId]: isActive };
