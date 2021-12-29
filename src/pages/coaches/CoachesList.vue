@@ -1,5 +1,5 @@
 <template>
-  <section>FILTER</section>
+  <coach-filter @change-filter="setFilters"></coach-filter>
   <section>
     <base-card>
       <div class="controls">
@@ -24,11 +24,21 @@
 
 <script>
 import CoachItem from "../../components/coaches/CoachItem.vue";
-import BaseButton from "../../components/ui/BaseButton.vue";
+import CoachFilter from "../../components/coaches/CoachFilter.vue";
+
 export default {
   components: {
     CoachItem,
-    BaseButton,
+    CoachFilter,
+  },
+  data() {
+    return {
+      activeFilters: {
+        frontend: true,
+        backend: true,
+        career: true,
+      },
+    };
   },
   computed: {
     filteredCoaches() {
@@ -36,10 +46,28 @@ export default {
       // we must use the registered namespace name which is coaches coming from,
       // store/index.js where we setup the modules. The second coaches below is the method name,
       // defined in getters.js
-      return this.$store.getters["coaches/coaches"];
+
+      const coaches = this.$store.getters["coaches/coaches"];
+      return coaches.filter((coach) => {
+        if (this.activeFilters.frontend && coach.areas.includes("frontend")) {
+          return true;
+        }
+        if (this.activeFilters.backend && coach.areas.includes("backend")) {
+          return true;
+        }
+        if (this.activeFilters.career && coach.areas.includes("career")) {
+          return true;
+        }
+        return false;
+      });
     },
     hasCoaches() {
       return this.$store.getters["coaches/hasCoaches"];
+    },
+  },
+  methods: {
+    setFilters(updatedFilters) {
+      this.activeFilters = updatedFilters;
     },
   },
 };
