@@ -37,14 +37,13 @@ export default {
         this.formIsValid = false;
         return;
       }
-      this.$store.dispatch[
-        ("requests/contactCoach",
-        {
-          email: this.email,
-          message: this.message,
-          coachId: this.$route.params.id,
-        })
-      ];
+      const payloadData = {
+        email: this.email,
+        message: this.message,
+        coachId: this.$route.params.id,
+      };
+      this.$store.dispatch("requests/contactCoach", payloadData);
+      // console.log(this.$route.params.id, payloadData);
       this.$router.replace("/coaches");
     },
   },
