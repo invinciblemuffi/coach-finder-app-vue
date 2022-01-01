@@ -10,7 +10,9 @@
   <section>
     <base-card>
       <div class="controls">
-        <base-button mode="outline" @click="loadCoaches">Refresh</base-button>
+        <base-button mode="outline" @click="loadCoaches(true)"
+          >Refresh</base-button
+        >
         <base-button v-if="!isCoach && !isLoadingData" link to="/register"
           >Register as Coach</base-button
         >
@@ -89,12 +91,14 @@ export default {
     setFilters(updatedFilters) {
       this.activeFilters = updatedFilters;
     },
-    async loadCoaches() {
+    async loadCoaches(refreshVal = false) {
       this.isLoadingData = true;
       // Since dispatch returns a promise
       // we can wait for the promise to complete and then set isLoadingData to false
       try {
-        await this.$store.dispatch("coaches/loadAllCoachesAction");
+        await this.$store.dispatch("coaches/loadAllCoachesAction", {
+          forceRefresh: refreshVal,
+        });
       } catch (error) {
         this.hasError = error.message || "Ooops! Something went wrong.";
       }

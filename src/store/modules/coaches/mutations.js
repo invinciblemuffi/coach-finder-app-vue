@@ -6,4 +6,8 @@ export default {
   getAllCoachesMutation(state, payload) {
     state.coaches = payload;
   },
+
+  getLastFetchedTimestamp(state) {
+    state.lastFetched = new Date().getTime();
+  },
 };

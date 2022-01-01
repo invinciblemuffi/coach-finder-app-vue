@@ -27,7 +27,11 @@ export default {
     context.commit("registerCoachMutation", { ...newCoachData, id: userId });
   },
 
-  async loadAllCoachesAction(context) {
+  async loadAllCoachesAction(context, payload) {
+    if (!payload.forceRefresh && !context.getters.shouldUpdate) {
+      return;
+    }
+
     const resp = await fetch(
       `https://coach-finder-de40b-default-rtdb.asia-southeast1.firebasedatabase.app/coaches.json`
     );
@@ -55,5 +59,6 @@ export default {
     }
 
     context.commit("getAllCoachesMutation", coaches);
+    context.commit("getLastFetchedTimestamp");
   },
 };
