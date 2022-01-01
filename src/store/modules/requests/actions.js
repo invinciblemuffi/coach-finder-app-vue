@@ -13,7 +13,7 @@ export default {
     const respData = resp.json();
 
     if (!resp.ok) {
-      throw new Error(respData.message || "Failed to send.");
+      throw new Error(respData.error || "Failed to send.");
     }
 
     // respData received from firebase has uinique id store under the key name
@@ -25,15 +25,16 @@ export default {
 
   async loadAllMessagesAction(context) {
     const coachId = context.rootGetters.userId;
+    const token = context.rootGetters.getToken;
     const resp = await fetch(
-      `https://coach-finder-de40b-default-rtdb.asia-southeast1.firebasedatabase.app/requests/${coachId}.json`
+      `https://coach-finder-de40b-default-rtdb.asia-southeast1.firebasedatabase.app/requests/${coachId}.json?auth=${token}`
     );
 
     const respData = await resp.json();
     console.dir(respData);
 
     if (!resp.ok) {
-      throw new Error(respData.message || "Failed to fetch.");
+      throw new Error(respData.error || "Failed to fetch.");
     }
 
     const requests = [];

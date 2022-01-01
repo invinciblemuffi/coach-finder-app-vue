@@ -78,14 +78,16 @@ export default {
         return;
       }
       this.isLoading = true;
+
+      const authPayload = {
+        email: this.email,
+        password: this.password,
+      };
       try {
         if (this.mode === "login") {
-          //   dispatch login action
+          await this.$store.dispatch("loginAction", authPayload);
         } else {
-          await this.$store.dispatch("signUpAction", {
-            email: this.email,
-            password: this.password,
-          });
+          await this.$store.dispatch("signUpAction", authPayload);
         }
       } catch (error) {
         this.hasError = error.message || "Failed to signup.";
@@ -126,8 +128,14 @@ label {
 input {
   display: block;
   width: 100%;
-  border: 1px solid #ccc;
-  padding: 0.15rem;
+  border: 1px solid #eee;
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.form-control:last-of-type input {
+  margin-bottom: 2rem;
 }
 
 input:focus {

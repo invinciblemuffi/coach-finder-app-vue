@@ -9,8 +9,10 @@ export default {
       areas: data.areas,
     };
 
+    const token = context.rootGetters.getToken;
+
     const resp = await fetch(
-      `https://coach-finder-de40b-default-rtdb.asia-southeast1.firebasedatabase.app/coaches/${userId}.json`,
+      `https://coach-finder-de40b-default-rtdb.asia-southeast1.firebasedatabase.app/coaches/${userId}.json?auth=${token}`,
       {
         method: "PUT",
         body: JSON.stringify(newCoachData),
@@ -21,7 +23,7 @@ export default {
     console.dir(respData);
 
     if (!resp.ok) {
-      // error
+      throw new Error(respData.error.message || "Oops, An error occured!");
     }
 
     context.commit("registerCoachMutation", { ...newCoachData, id: userId });
@@ -40,9 +42,7 @@ export default {
     console.dir(respData);
 
     if (!resp.ok) {
-      // error
-      const err = new Error(respData.message || "Failed to fetch data!");
-      throw err;
+      throw new Error(respData.error.message || "Failed to fetch data!");
     }
 
     const coaches = [];
