@@ -11,10 +11,14 @@
     <section>
       <base-card>
         <div class="controls">
-          <base-button mode="outline" @click="loadCoaches(true)"
-            >Refresh</base-button
-          >
-          <base-button v-if="!isCoach && !isLoadingData" link to="/register"
+          <base-button mode="outline" @click="loadCoaches(true)">
+            Refresh
+          </base-button>
+          <base-button link to="/login" v-if="!isLoggedIn">Login</base-button>
+          <base-button
+            v-if="isLoggedIn && !isCoach && !isLoadingData"
+            link
+            to="/register"
             >Register as Coach</base-button
           >
         </div>
@@ -61,6 +65,9 @@ export default {
   computed: {
     dotColor() {
       return "#3d008d";
+    },
+    isLoggedIn() {
+      return this.$store.getters.isAuthenticated;
     },
     filteredCoaches() {
       // Since we are namespacing our coaches state in coaches/index.js,
