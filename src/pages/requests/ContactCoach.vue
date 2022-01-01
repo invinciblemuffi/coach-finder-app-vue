@@ -43,7 +43,6 @@ export default {
         coachId: this.$route.params.id,
       };
       this.$store.dispatch("requests/contactCoach", payloadData);
-      // console.log(this.$route.params.id, payloadData);
       this.$router.replace("/coaches");
     },
   },
