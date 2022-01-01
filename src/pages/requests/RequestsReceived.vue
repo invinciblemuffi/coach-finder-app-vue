@@ -1,30 +1,32 @@
 <template>
-  <base-modal
-    :show="!!hasError"
-    title="An error occurred!"
-    @close="handleError"
-  >
-    <p>{{ hasError }}</p>
-  </base-modal>
-  <section>
-    <base-card>
-      <header>
-        <h2>Requests Received</h2>
-      </header>
-      <div v-if="isLoding" class="loaderContainer">
-        <loader v-if="isLoading" :size="'100'" :color="dotColor"></loader>
-      </div>
-      <ul v-else-if="hasRequests && !isLoading">
-        <request-item
-          v-for="req in receivedRequests"
-          :key="req.id"
-          :email="req.userEmail"
-          :message="req.message"
-        ></request-item>
-      </ul>
-      <h3 v-else>You haven't received any requests yet!</h3>
-    </base-card>
-  </section>
+  <div>
+    <base-modal
+      :show="!!hasError"
+      title="An error occurred!"
+      @close="handleError"
+    >
+      <p>{{ hasError }}</p>
+    </base-modal>
+    <section>
+      <base-card>
+        <header>
+          <h2>Requests Received</h2>
+        </header>
+        <div v-if="isLoding" class="loaderContainer">
+          <loader v-if="isLoading" :size="'100'" :color="dotColor"></loader>
+        </div>
+        <ul v-else-if="hasRequests && !isLoading">
+          <request-item
+            v-for="req in receivedRequests"
+            :key="req.id"
+            :email="req.userEmail"
+            :message="req.message"
+          ></request-item>
+        </ul>
+        <h3 v-else>You haven't received any requests yet!</h3>
+      </base-card>
+    </section>
+  </div>
 </template>
 
 <script>
