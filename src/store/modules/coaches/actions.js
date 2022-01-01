@@ -37,6 +37,8 @@ export default {
 
     if (!resp.ok) {
       // error
+      const err = new Error(respData.message || "Failed to fetch data!");
+      throw err;
     }
 
     const coaches = [];

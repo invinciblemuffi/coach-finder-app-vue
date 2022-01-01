@@ -1,14 +1,24 @@
 <template>
+  <base-modal
+    :show="!!hasError"
+    title="An error occurred!"
+    @close="handleError"
+  >
+    <p>{{ hasError }}</p>
+  </base-modal>
   <coach-filter @change-filter="setFilters"></coach-filter>
   <section>
     <base-card>
       <div class="controls">
         <base-button mode="outline" @click="loadCoaches">Refresh</base-button>
-        <base-button v-if="!isCoach" link to="/register"
+        <base-button v-if="!isCoach && !isLoadingData" link to="/register"
           >Register as Coach</base-button
         >
       </div>
-      <ul v-if="hasCoaches">
+      <div v-if="isLoadingData" class="loaderContainer">
+        <loader :isLoading="isLoadingData" :color="dotColor"></loader>
+      </div>
+      <ul v-else-if="hasCoaches">
         <coach-item
           v-for="coach in filteredCoaches"
           :key="coach.id"
@@ -35,6 +45,8 @@ export default {
   },
   data() {
     return {
+      isLoadingData: false,
+      hasError: null,
       activeFilters: {
         frontend: true,
         backend: true,
@@ -43,6 +55,9 @@ export default {
     };
   },
   computed: {
+    dotColor() {
+      return "#3d008d";
+    },
     filteredCoaches() {
       // Since we are namespacing our coaches state in coaches/index.js,
       // we must use the registered namespace name which is coaches coming from,
@@ -64,7 +79,7 @@ export default {
       });
     },
     hasCoaches() {
-      return this.$store.getters["coaches/hasCoaches"];
+      return !this.isLoadingData && this.$store.getters["coaches/hasCoaches"];
     },
     isCoach() {
       return this.$store.getters["coaches/isCoachPresent"];
@@ -74,8 +89,19 @@ export default {
     setFilters(updatedFilters) {
       this.activeFilters = updatedFilters;
     },
-    loadCoaches() {
-      this.$store.dispatch("coaches/loadAllCoachesAction");
+    async loadCoaches() {
+      this.isLoadingData = true;
+      // Since dispatch returns a promise
+      // we can wait for the promise to complete and then set isLoadingData to false
+      try {
+        await this.$store.dispatch("coaches/loadAllCoachesAction");
+      } catch (error) {
+        this.hasError = error.message || "Ooops! Something went wrong.";
+      }
+      this.isLoadingData = false;
+    },
+    handleError() {
+      this.hasError = null;
     },
   },
   created() {
@@ -85,6 +111,12 @@ export default {
 </script>
 
 <style scoped>
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  margin: 2rem auto;
+}
+
 ul {
   list-style: none;
   margin: 0;
